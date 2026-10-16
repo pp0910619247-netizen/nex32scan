@@ -1,0 +1,26 @@
+# ===== dependencies =====
+node_modules/
+
+# ===== build output =====
+dist/
+**/.next/
+.turbo/
+*.tsbuildinfo
+coverage/
+
+# ===== Vercel =====
+.vercel/
+.vercel/output/
+
+# ===== env & secrets — never commit (.env.example files stay committable) =====
+.env
+.env.*
+!**/.env.example
+
+# ===== local quiz-chain data =====
+.chain-data/
+
+# ===== logs & tooling noise =====
+*.log
+.DS_Store
+.vscode/

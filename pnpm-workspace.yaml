@@ -1,0 +1,12 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# Dependency build-script approvals (pnpm >=11 uses allowBuilds; all others are blocked).
+# esbuild (required by vitest/vite) needs its postinstall to provide its native binary.
+allowBuilds:
+  esbuild: true
+  protobufjs: true
+  sharp: true
+  onnxruntime-web: true
+  onnxruntime-node: true

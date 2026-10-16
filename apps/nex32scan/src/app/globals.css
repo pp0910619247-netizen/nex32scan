@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Warm cream, not a glaring white: the page sits on `#FAF6EC` (soft
+ * yellow-white), cards stay pure white and the accent is the gold of the
+ * brand mark (public/logo.png). Light-only, so the site looks the same
+ * for every reader.
+ *
+ * CSS variables below mirror `@nexus/shared` design tokens
+ * (`palettes`/`radii`/`motion`) — tokens are the source of truth.
+ */
+:root {
+  color-scheme: light;
+  --nex-bg: #FAF6EC;
+  --nex-surface: #FFFFFF;
+  --nex-surface-raised: #F3EEDF;
+  --nex-border: #E7E0CE;
+  --nex-text: #1C1917;
+  --nex-text-secondary: #6B6259;
+  --nex-accent: #B45309;
+  --nex-accent-text: #FFFFFF;
+  --nex-success: #047857;
+  --nex-warning: #B45309;
+  --nex-danger: #B91C1C;
+  --nex-info: #1D4ED8;
+  --nex-radius-md: 8px;
+  --nex-motion-normal: 220ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  @apply bg-[#FAF6EC] text-stone-900 antialiased;
+}
