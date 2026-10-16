@@ -82,6 +82,28 @@ underline) in `src/components/shell.tsx` are the single source of these styles; 
 compose them. If you add a page, reuse those components instead of writing new colour
 classes. `src/app/globals.css` holds the cream page base.
 
+### Brand assets
+
+Every icon on the site comes from one vector source — the gold pyramid mark — rasterised by
+`scripts/generate-brand-assets.mjs` (pure Node + zlib, no native image tooling; deterministic
+bytes on every platform). Change the design there, not in the PNGs:
+
+```bash
+node scripts/generate-brand-assets.mjs            # write the web + mobile sets
+node scripts/generate-brand-assets.mjs --out tmp  # staged copy for review
+```
+
+| File | Size | Role |
+| --- | --- | --- |
+| `public/logo.png` | 512×512 | header mark, manifest icon (`any`) |
+| `public/icon-192.png` | 192×192 | PWA icon, `<link rel="icon">` |
+| `public/apple-touch-icon.png` | 180×180 | iOS home-screen icon |
+| `public/favicon.ico` | 16/32/48 | real multi-size ICO (PNG entries) |
+
+`src/lib/brand-assets.test.ts` fails if any file drifts from the size its manifest entry
+promises, so the two cannot silently disagree again. The same script emits the mobile app
+icon roles (1024px, `apps/mobile/assets`) — web and app shares cannot diverge.
+
 The chain's cadence is surfaced in the UI too: the hero line and the mobile mining tab both
 state **one question per hour** (block interval `3,600 s ± 600 s`, see `@nexus/backend`).
 **Answers are never shown as a letter.** The owner's rule: printing "Answer B" / "เฉลย ข" would
@@ -103,11 +125,23 @@ time words through `timeWords(lang)`.
 ```bash
 pnpm --filter @nexus/nex32scan typecheck
 pnpm --filter @nexus/nex32scan test
+pnpm --filter @nexus/nex32scan test:coverage   # same suites + enforced threshold
 ```
 
 Covers i18n parity/templates, bigint-safe NEX formatting, the Genesis reward view
 model (incl. the 2,100,000 NEX cap), the status/answer parsers, and the live-read
 paths against a stubbed node (live vs snapshot source, feed ordering, limit).
+
+### Coverage gate
+
+The threshold lives in `vitest.config.ts` and covers the unit-testable layer:
+`src/lib/**` (data-source selection, node payload mapping, sorting, formatting) and
+`src/i18n/**` — measured at **91.2% statements / 82.1% branches** on 2026-10-16.
+
+The App Router pages and React components are deliberately **not** in the gate: they
+need a browser runner (Playwright/axe), which is not wired up yet, so listing them
+would drag the number to ~23% and hide the modules that really are covered. Adding
+that runner and folding the pages into the gate is the next step.
 
 ## Ops
 

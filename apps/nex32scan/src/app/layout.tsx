@@ -37,7 +37,13 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: SITE_URL,
   },
-  icons: { icon: '/logo.png', apple: '/icon-192.png' },
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+  },
   manifest: '/manifest.webmanifest',
   twitter: {
     card: 'summary',
