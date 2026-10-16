@@ -7,6 +7,7 @@ import { remoteApiUrl } from '@/lib/explorer';
 import { formatCount, formatDuration, formatNex, formatPercent, shortHash } from '@/lib/format';
 import { GENESIS_FACTS, scheduledBlockReward } from '@/lib/reward';
 import { AutoRefresh, RelativeTime } from './live';
+import { LINK_CLASS } from './table-bits';
 import { LanguageSwitcher } from './language-switcher';
 import { SearchBox } from './search-box';
 import { CommandPalette } from './command-palette';
@@ -18,9 +19,6 @@ import { CommandPalette } from './command-palette';
  * ride on hue still rides on fill where clarity matters: solid = the strongest
  * statement (milestone, correct, winner), outline = negative, muted = neutral.
  */
-
-/** Every link in the explorer: black with a grey underline that darkens on hover. */
-export const LINK_CLASS = 'text-stone-900 underline decoration-amber-400 underline-offset-2 hover:decoration-amber-700';
 
 /** Route segment → supported language (anything else falls back to English). */
 export function langFrom(value: string): Lang {
@@ -100,34 +98,11 @@ export function Table({ head, rows }: { head: readonly string[]; rows: readonly 
  * `muted` = secondary metadata (not yet revealed),
  * `soft`  = neutral tag (discipline).
  */
-const BADGE_TONES = {
-  soft: 'bg-stone-100 text-stone-700',
-  /** Gold = positive/revealed: milestone, correct answer, winner. */
-  solid: 'bg-amber-700 text-white',
-  outline: 'border border-stone-400 bg-white text-stone-700',
-  muted: 'bg-stone-200 text-stone-800',
-} as const;
-
-/** Small pill label (HARD, MILESTONE, correct/incorrect, …). */
-export function Badge({ tone = 'muted', children }: { tone?: keyof typeof BADGE_TONES; children: ReactNode }) {
-  return <span className={`inline-block rounded px-2 py-0.5 text-xs ${BADGE_TONES[tone]}`}>{children}</span>;
-}
-
-/** `0x1234…abcd` address cell. */
-export function ShortAddress({ address }: { address: string | null }) {
-  return <span className="font-mono text-xs text-stone-700">{shortHash(address, 8, 6)}</span>;
-}
-
-/** Address cell that links to the address page whenever it is a real 0x address. */
-export function AddressCell({ address, lang }: { address: string | null; lang: Lang }) {
-  if (!address) return <span className="text-stone-500">—</span>;
-  if (!/^0x[0-9a-fA-F]{40}$/.test(address)) return <ShortAddress address={address} />;
-  return (
-    <Link href={`/${lang}/address/${address.toLowerCase()}`} className={LINK_CLASS}>
-      <ShortAddress address={address} />
-    </Link>
-  );
-}
+/** Presentational bits shared with client tables — re-exported here so every
+ * page keeps the single `@/components/shell` import, while client components
+ * can import them from `table-bits` without pulling the server-only modules
+ * this file loads. */
+export { AddressCell, Badge, LINK_CLASS, ShortAddress } from './table-bits';
 
 /** Monospace hash cell with the full value in the tooltip. */
 export function HashValue({ value, href, className = '' }: { value: string | null | undefined; href?: string; className?: string }) {
