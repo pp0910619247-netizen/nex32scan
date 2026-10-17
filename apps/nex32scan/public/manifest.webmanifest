@@ -1,7 +1,7 @@
 {
   "name": "NEX32SCAN — Nexus Architect explorer",
   "short_name": "NEX32SCAN",
-  "description": "Testnet explorer for the Nexus Architect knowledge chain (Polygon Amoy).",
+  "description": "Explorer for the Nexus Architect knowledge chain on Polygon mainnet: sealed blocks, answers and the Genesis tokenomics schedule.",
   "start_url": "/th",
   "display": "standalone",
   "background_color": "#FAF6EC",

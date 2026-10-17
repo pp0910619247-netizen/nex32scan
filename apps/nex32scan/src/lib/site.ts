@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 
 /** Canonical origin of the explorer — overridable for preview deployments. */
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nex32scan.vercel.app';
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nexusarchitect.online';
 
 const DESCRIPTION =
   'Explorer for the Nexus Architect knowledge chain on Polygon mainnet: sealed blocks, answers, tamper-proof commitments and the Genesis tokenomics schedule.';

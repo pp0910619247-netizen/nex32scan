@@ -1,6 +1,6 @@
 # Deploy nex32scan ขึ้นโฮสติ้งฟรี (Vercel)
 
-**สถานะล่าสุด: ใช้งานได้จริง → https://nex32scan.vercel.app** (deploy 2026-10-17 — บิลด์บนคลาวด์ จาก repo เว็บ `pp0910619247-netizen/nex32scan`)
+**สถานะล่าสุด: ใช้งานได้จริง → https://nexusarchitect.online** (โดเมนจริง 2026-10-17 · สำรอง: https://nex32scan.vercel.app — บิลด์บนคลาวด์ จาก repo เว็บ `pp0910619247-netizen/nex32scan`)
 
 > **Git link:** เชื่อมแล้ว (2026-10-17) — repo `pp0910619247-netizen/nex32scan` branch `main` → **push = deploy อัตโนมัติ**
 > (ยังรัน deploy มือด้วยคำสั่งด้านล่างได้เสมอ)
