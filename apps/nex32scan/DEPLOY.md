@@ -2,9 +2,8 @@
 
 **สถานะล่าสุด: ใช้งานได้จริง → https://nex32scan.vercel.app** (deploy 2026-10-17 — บิลด์บนคลาวด์ จาก repo เว็บ `pp0910619247-netizen/nex32scan`)
 
-> **Git link:** ยังไม่ผูกโปรเจกต์ Vercel กับ GitHub — ตอนนี้ deploy ด้วยคำสั่งด้านล่างเท่านั้น
-> ถ้าต้องการ auto-deploy ทุก push: connect GitHub login ที่ Vercel (Account Settings → Login Connections)
-> แล้วรัน `npx vercel git connect https://github.com/pp0910619247-netizen/nex32scan.git` ครั้งเดียว
+> **Git link:** เชื่อมแล้ว (2026-10-17) — repo `pp0910619247-netizen/nex32scan` branch `main` → **push = deploy อัตโนมัติ**
+> (ยังรัน deploy มือด้วยคำสั่งด้านล่างได้เสมอ)
 
 อัปเดตล่าสุด (รอบ "explorer มาตรฐาน"): เพิ่มหน้า `/[lang]/blocks`, แถบสถิติทั้งเชน,
 ตาราง Latest blocks / Latest answers, หน้าบล็อกแบบ overview + แตก reward 10/40/60,
@@ -42,7 +41,7 @@ npx vercel deploy --prod --yes
 #    บิลด์บนคลาวด์ ~45 วิ (Root Directory = apps/nex32scan ตั้งไว้แล้ว — ห้ามใช้ --prebuilt บน Windows)
 ```
 
-หลัง connect GitHub login + `npx vercel git connect` แล้ว ขั้น (2) จะเกิดอัตโนมัติทุก push (ยังรันมือได้เสมอ)
+ขั้น (2) เกิดอัตโนมัติทุก push ขึ้น `main` แล้ว (เชื่อม git วันที่ 2026-10-17) — ยังรันมือได้เสมอ
 
 ตรวจหลัง deploy ให้ครบ: `/[lang]`, `/[lang]/blocks`, `/favicon.ico`, `/logo.png`, `/icon-192.png`, `/apple-touch-icon.png` คืน `200`
 
@@ -51,7 +50,7 @@ npx vercel deploy --prod --yes
 | ค่า | ที่ตั้งไว้ | หมายเหตุ |
 |---|---|---|
 | Root Directory | `apps/nex32scan` | ตั้งผ่าน API แล้ว — อัปโหลดทั้ง repo แต่บิลด์ในโฟลเดอร์แอป |
-| Git link | **ยังไม่เชื่อม** (2026-10-17) | ต้อง connect GitHub login ก่อน แล้ว `npx vercel git connect https://github.com/pp0910619247-netizen/nex32scan.git` → auto-deploy ทุก push |
+| Git link | **เชื่อมแล้ว** (2026-10-17) | `pp0910619247-netizen/nex32scan` · production branch `main` · push = deploy อัตโนมัติ |
 | Framework | `nextjs` | |
 | Install Command | `pnpm install --no-frozen-lockfile` | pnpm 12 ไม่รับ `--frozen-lockfile=false` (พังตอนแรก) |
 | Build Command | `node scripts/bake-explorer-snapshot.mjs && pnpm --filter @nexus/indexer build && pnpm --filter @nexus/shared build && next build` | ตรงกับ `apps/nex32scan/vercel.json` |
