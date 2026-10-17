@@ -35,6 +35,8 @@
 pnpm --filter @nexus/backend chain:export
 pnpm --filter @nexus/nex32scan bake:snapshot
 #    แล้วคัดไฟล์ src/generated/explorer-snapshot.json เข้า "repo เว็บ" + commit
+#    (ทั้ง chain:export และ bake:snapshot ใช้ค่า default dir เดียวกัน: packages/.chain-data
+#     — ถ้าตั้ง CHAIN_DATA_DIR ใน packages/backend/.env ต้องใช้ absolute path เสมอ)
 
 # 2) deploy — จาก root ของ "repo เว็บ" (github.com/pp0910619247-netizen/nex32scan)
 npx vercel deploy --prod --yes
@@ -63,13 +65,15 @@ npx vercel deploy --prod --yes
 1. **ห้ามใช้ `vercel deploy --prebuilt` จาก Windows** — `vercel build` สร้าง `.rsc.func` เป็น symlink
    พออัปโหลดแล้วฝั่ง Vercel stat ไม่เจอ (`ENOENT … [lang]/address/[addr].func`); ถ้าไป materialize
    เป็นโฟลเดอร์จริงก็จะโดนลิมิต 12 ฟังก์ชัน → ใช้ **cloud build** เท่านั้น
-2. **เพดาน 12 serverless functions (Hobby)** — ตอนนี้ใช้ 6-7: dynamic 5 ตัวคือ `/api/[[...path]]`,
-   `/[lang]/block/[height]`, `/[lang]/address/[addr]`, `/[lang]/blocks`, `/[lang]/search`
-   บวก `/_not-found` และ `/sitemap.xml`
-   - หน้า static: `/[lang]`, `/[lang]/impact`, `/[lang]/token` (มี `generateStaticParams` + `dynamicParams = false`)
+2. **เพดาน 12 serverless functions (Hobby)** — ตรวจจาก build จริง 2026-10-17 ใช้ **9 ฟังก์ชัน node**:
+   `/`, `/api/[[...path]]`, `/[lang]/block/[height]`, `/[lang]/address/[addr]`, `/[lang]/blocks`,
+   `/[lang]/leaderboard`, `/[lang]/problem/[height]`, `/[lang]/search`, `/llms.txt`
+   (edge อีก 1 ตัว: `/[lang]/block/[height]/opengraph-image` — edge ไม่นับในเพดาน 12)
+   - หน้า static (ไม่กินฟังก์ชัน): `/[lang]` (en/th), `/[lang]/impact`, `/[lang]/token`, `/_not-found`, `/sitemap.xml`
+   - `/llms.txt` เป็น lab flag — production ปิดเป็นค่า default (ตอบ 404) เปิดด้วย `NEX_LAB_LLMS_TXT=1`
    - `public/robots.txt` เป็นไฟล์นิ่ง (0 ฟังก์ชัน) — ไม่ใช้ `robots.ts`
    - แถบสถิติ/ตารางคำตอบในหน้า static อ่านจากสแนปชอตที่อบตอน build จึงไม่ทำให้หน้า static กลายเป็น dynamic
-   - redirect `/` → `/th` และ `/search` → `/th/search` ทำใน `next.config.mjs` `redirects()` (0 ฟังก์ชัน)
+   - redirect `/search` → `/th/search` ทำใน `next.config.mjs` `redirects()` (0 ฟังก์ชัน) — `/` เป็นหน้า landing เอง ไม่มี redirect
    - API เดิม `/api/explorer` + `/api/search` ถูกรวมเป็น catch-all ไฟล์เดียว
    - **ก่อนเพิ่ม route ใหม่ ให้เช็คว่าจำนวนฟังก์ชันยังไม่เกิน 12**
 3. **`.env` ไม่ขึ้นคลาวด์** (gitignore + `.vercelignore`) และบิลด์บนคลาวด์ไม่มี `.chain-data`

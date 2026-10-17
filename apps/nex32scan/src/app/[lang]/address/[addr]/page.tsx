@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import type { HexAddress } from '@nexus/indexer';
 import { Badge, Card, HashValue, Nex, Shell, ShortAddress, Table, langFrom } from '@/components/shell';
@@ -6,8 +7,13 @@ import { dictionary, timeWords } from '@/i18n';
 import { recentAnswers } from '@/lib/chain-data';
 import { indexer } from '@/lib/explorer';
 import { formatCount, optionText, truncate } from '@/lib/format';
+import { pageAlternates } from '@/lib/seo';
 
 /** Reads the address from the path, so it stays a single serverless function. */
+export function generateMetadata({ params }: { params: { lang: string; addr: string } }): Metadata {
+  return { alternates: pageAlternates(langFrom(params.lang), `/address/${params.addr}`) };
+}
+
 export default async function Page({ params }: { params: { lang: string; addr: string } }) {
   const lang = langFrom(params.lang);
   const t = dictionary(lang);

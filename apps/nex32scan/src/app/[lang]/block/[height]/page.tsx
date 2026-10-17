@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { AddressCell, Badge, Card, HashValue, Shell, ShortAddress, Table, Nex, langFrom } from '@/components/shell';
@@ -7,10 +8,15 @@ import { dictionary, fill, timeWords } from '@/i18n';
 import { indexer } from '@/lib/explorer';
 import { formatCount, formatNex, optionText, truncate } from '@/lib/format';
 import { GENESIS_FACTS, scheduledBlockReward } from '@/lib/reward';
+import { pageAlternates } from '@/lib/seo';
 
 /** True when `miner` is the block's fastest correct answerer (case-insensitive). */
 function isWinner(winner: string | null | undefined, miner: string): boolean {
   return Boolean(winner) && winner?.toLowerCase() === miner.toLowerCase();
+}
+
+export function generateMetadata({ params }: { params: { lang: string; height: string } }): Metadata {
+  return { alternates: pageAlternates(langFrom(params.lang), `/block/${params.height}`) };
 }
 
 export default async function Page({ params }: { params: { lang: string; height: string } }) {

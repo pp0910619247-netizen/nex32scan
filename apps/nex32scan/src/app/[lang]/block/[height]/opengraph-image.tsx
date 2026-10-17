@@ -13,8 +13,8 @@ export default async function OpengraphImage({ params }: { params: { lang: strin
   const title = lang === 'th' ? `บล็อก #${params.height}` : `Block #${params.height}`;
   const subtitle =
     lang === 'th'
-      ? 'NEX32SCAN · เชนความรู้ · Polygon Amoy testnet'
-      : 'NEX32SCAN · Knowledge chain · Polygon Amoy testnet';
+      ? 'NEX32SCAN · เชนความรู้ · Polygon mainnet'
+      : 'NEX32SCAN · Knowledge chain · Polygon mainnet';
   return new ImageResponse(
     (
       <div

@@ -13,7 +13,7 @@ const GITHUB_URL = 'https://github.com/pp0910619247-netizen/NexusArchitect32';
 export const metadata: Metadata = {
   title: 'Nexus Architect (NEX) — Mine knowledge. Shape impact.',
   description:
-    'Knowledge-mining blockchain, a personal AI agent and an Impact Treasury on Polygon Amoy testnet. Explore sealed blocks, answers and the locked Genesis tokenomics.',
+    'Knowledge-mining blockchain, a personal AI agent and an Impact Treasury on Polygon mainnet. Explore sealed blocks, answers and the locked Genesis tokenomics.',
 };
 
 /** Allocation bars, derived from the locked tokenomics constants (never typed by hand). */

@@ -12,6 +12,9 @@ try {
 }
 
 const nextConfig = {
+  // Verification builds can use their own output dir (`NEXT_DIST_DIR=.next-verify`)
+  // so a production build never fights a running `next dev` — see `.gitignore`.
+  distDir: process.env.NEXT_DIST_DIR ?? '.next',
   poweredByHeader: false,
   env: {
     // Inlined into the server bundle at build time; runtime EXPLORER_RUNTIME_JSON overrides it.
@@ -22,7 +25,7 @@ const nextConfig = {
   // plan allows 12 — see DEPLOY.md.
   async redirects() {
     return [
-      // The root path now serves the project landing page (app/page.tsx);
+      // The root path now serves the project landing page (app/(landing)/page.tsx);
       // only the legacy /search alias points into the localized explorer.
       { source: '/search', destination: '/th/search', permanent: false },
     ];

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AddressCell, Card, HashValue, Shell, langFrom } from '@/components/shell';
 import { SearchBox } from '@/components/search-box';
@@ -7,10 +8,15 @@ import { indexer } from '@/lib/explorer';
 import { labFlags } from '@/lib/lab';
 import { nlHref, parseNlQuery } from '@/lib/nl-search';
 import { formatCount, truncate } from '@/lib/format';
+import { pageAlternates } from '@/lib/seo';
 import type { QuizExplorerBlock } from '@nexus/indexer';
 
 // Reads ?q= from the request, so it stays a single serverless function.
 export const dynamic = 'force-dynamic';
+
+export function generateMetadata({ params }: { params: { lang: string } }): Metadata {
+  return { alternates: pageAlternates(langFrom(params.lang), '/search') };
+}
 
 const MAX_HITS = 25;
 

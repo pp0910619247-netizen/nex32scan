@@ -6,7 +6,9 @@
  * Usage:
  *   node scripts/bake-explorer-snapshot.mjs [snapshotPath]
  *
- * snapshotPath defaults to $INDEXER_SNAPSHOT_PATH or ../../.chain-data/explorer-snapshot.json
+ * snapshotPath defaults to $INDEXER_SNAPSHOT_PATH or
+ * ../../../packages/.chain-data/explorer-snapshot.json (the same dir the
+ * quiz-chain node and `pnpm --filter @nexus/backend chain:export` write to).
  * The output is a JSON file under src/generated/ which next.config.mjs
  * inlines as BAKED_SNAPSHOT_JSON at build time.
  *
@@ -22,7 +24,7 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const argPath = process.argv[2];
 const snapshotPath =
-  argPath ?? process.env.INDEXER_SNAPSHOT_PATH ?? resolve(here, '../../../.chain-data/explorer-snapshot.json');
+  argPath ?? process.env.INDEXER_SNAPSHOT_PATH ?? resolve(here, '../../../packages/.chain-data/explorer-snapshot.json');
 const outDir = resolve(here, '../src/generated');
 const outPath = resolve(outDir, 'explorer-snapshot.json');
 

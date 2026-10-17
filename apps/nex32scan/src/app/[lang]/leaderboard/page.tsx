@@ -1,11 +1,17 @@
+import type { Metadata } from 'next';
 import { AddressCell, Badge, Card, Shell, langFrom } from '@/components/shell';
 import { LeaderboardTable, type LeaderboardTableRow } from '@/components/leaderboard-table';
 import { dictionary } from '@/i18n';
 import { buildLeaderboard, topByDiscipline } from '@/lib/leaderboard';
 import { indexer } from '@/lib/explorer';
 import { formatCount, formatPercent } from '@/lib/format';
+import { pageAlternates } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
+
+export function generateMetadata({ params }: { params: { lang: string } }): Metadata {
+  return { alternates: pageAlternates(langFrom(params.lang), '/leaderboard') };
+}
 
 /**
  * Leaderboards (PHASE 3.9, v1): one address board (wins → accuracy → blocks)

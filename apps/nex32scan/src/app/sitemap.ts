@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { indexer } from '@/lib/explorer';
+import { SITE_URL } from '@/lib/site';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nex32scan.vercel.app';
 const MAX_BLOCK_ENTRIES = 100;
 const LOCALES = ['en', 'th'] as const;
 const STATIC_PATHS = ['', '/blocks', '/leaderboard', '/token', '/impact', '/search'] as const;

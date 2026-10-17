@@ -1,4 +1,4 @@
-name: nex32scan-web-ci
+name: nexus-ci
 
 on:
   push:
@@ -22,8 +22,26 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm lint
-      - run: pnpm test
+      # Build first: the question-bank generator runs from dist (below).
       - run: pnpm build
+      # Generate the deterministic bank the acceptance suites validate. It is
+      # gitignored (~100 MB) and takes ~4 s, so CI gets the real bank instead of
+      # silently skipping those tests via describe.skipIf.
+      - name: generate the world-v2 question bank
+        run: pnpm --filter @nexus/backend world2:generate
+      # Runs every suite AND enforces the per-package coverage thresholds.
+      - run: pnpm test:coverage
+      - name: i18n parity (shared + explorer)
+        run: |
+          pnpm --filter @nexus/shared exec vitest run test/i18n.test.ts
+          pnpm --filter @nexus/nex32scan exec vitest run src/i18n/index.test.ts
+
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: foundry-rs/foundry-toolchain@v1
+      - run: cd packages/contracts && forge test
 
   secrets:
     runs-on: ubuntu-latest

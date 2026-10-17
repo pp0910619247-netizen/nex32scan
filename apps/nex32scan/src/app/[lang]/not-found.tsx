@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { dictionary } from '@/i18n';
 
 /**
- * Root 404. `notFound()` from any locale route lands here, and a not-found
- * boundary has no route params, so the page shows both languages instead of
- * guessing — every string still comes from the dictionaries.
+ * Locale-tree 404. `notFound()` from any route under /[lang] lands here, and a
+ * not-found boundary has no route params, so the page shows both languages
+ * instead of guessing — every string still comes from the dictionaries.
  */
 export default function NotFound() {
   const en = dictionary('en');

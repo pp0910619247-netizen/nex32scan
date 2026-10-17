@@ -1,13 +1,19 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Card, Shell, Table, langFrom } from '@/components/shell';
 import { EraChart } from '@/components/era-chart';
 import { dictionary, fill } from '@/i18n';
 import { formatCount, formatNex } from '@/lib/format';
 import { GENESIS_FACTS, genesisEraRows } from '@/lib/reward';
+import { pageAlternates } from '@/lib/seo';
 
 // Static for both locales (pure constants, no request data).
 export function generateStaticParams() { return [{ lang: 'en' }, { lang: 'th' }]; }
 export const dynamicParams = false;
+
+export function generateMetadata({ params }: { params: { lang: string } }): Metadata {
+  return { alternates: pageAlternates(langFrom(params.lang), '/token') };
+}
 
 const ALLOCATION = [
   { key: 'allocMining', share: 50 },

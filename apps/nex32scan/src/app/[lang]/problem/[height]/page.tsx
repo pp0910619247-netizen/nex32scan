@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { AddressCell, Badge, Card, Shell, langFrom } from '@/components/shell';
@@ -5,6 +6,7 @@ import { HashChip } from '@/components/hash-chip';
 import { dictionary } from '@/i18n';
 import { indexer } from '@/lib/explorer';
 import { formatCount, formatPercent } from '@/lib/format';
+import { pageAlternates } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,6 +15,10 @@ export const dynamic = 'force-dynamic';
  * solve rate, commitment seal. The answer appears only after reveal;
  * holdout items never render here (no holdout set is published yet).
  */
+export function generateMetadata({ params }: { params: { lang: string; height: string } }): Metadata {
+  return { alternates: pageAlternates(langFrom(params.lang), `/problem/${params.height}`) };
+}
+
 export default async function Page({ params }: { params: { lang: string; height: string } }) {
   const lang = langFrom(params.lang);
   const t = dictionary(lang);

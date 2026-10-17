@@ -151,5 +151,7 @@ that runner and folding the pages into the gate is the next step.
   `Cross-Origin-Opener-Policy`, `Permissions-Policy`) and `poweredByHeader: false`
   are set in `next.config.mjs`; `X-Frame-Options` is security-relevant because the
   explorer is meant to be embedded nowhere.
-- 404s render `src/app/not-found.tsx` in both languages (a not-found boundary has no
-  route params).
+- 404s from `notFound()` (content that does not exist) render `src/app/[lang]/not-found.tsx`
+  in both languages (a not-found boundary has no route params). Unmatched paths fall back to
+  Next's built-in 404: with two root layouts a global `app/not-found.tsx` is not allowed
+  (Next errors with "not-found.tsx doesn't have a root layout").

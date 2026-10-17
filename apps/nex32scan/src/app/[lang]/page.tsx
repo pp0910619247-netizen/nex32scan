@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AddressCell, Badge, Card, HashValue, Shell, Table, langFrom } from '@/components/shell';
 import { DisciplineGraph } from '@/components/discipline-graph';
@@ -10,11 +11,16 @@ import { indexer } from '@/lib/explorer';
 import { labFlags } from '@/lib/lab';
 import { formatCount, formatNex, optionText, truncate } from '@/lib/format';
 import { GENESIS_FACTS, scheduledBlockReward } from '@/lib/reward';
+import { pageAlternates } from '@/lib/seo';
 
 // Prerendered for both locales at build time → served as static HTML with no
 // serverless function (Hobby plan allows only 12 — see DEPLOY.md).
 export function generateStaticParams() { return [{ lang: 'en' }, { lang: 'th' }]; }
 export const dynamicParams = false; // no fallback serverless function for other locales
+
+export function generateMetadata({ params }: { params: { lang: string } }): Metadata {
+  return { alternates: pageAlternates(langFrom(params.lang), '') };
+}
 
 const LATEST = 10;
 const LATEST_QUESTIONS = 5;
