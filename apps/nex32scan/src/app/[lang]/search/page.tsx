@@ -7,7 +7,7 @@ import { findAnswerByCommitment } from '@/lib/chain-data';
 import { indexer } from '@/lib/explorer';
 import { labFlags } from '@/lib/lab';
 import { nlHref, parseNlQuery } from '@/lib/nl-search';
-import { formatCount, truncate } from '@/lib/format';
+import { formatCount, revealedTextFor, truncate } from '@/lib/format';
 import { pageAlternates } from '@/lib/seo';
 import type { QuizExplorerBlock } from '@nexus/indexer';
 
@@ -30,7 +30,8 @@ function textHits(blocks: readonly QuizExplorerBlock[], query: string): QuizExpl
         block.promptEn.toLowerCase().includes(needle) ||
         block.disciplineTh.toLowerCase().includes(needle) ||
         block.disciplineEn.toLowerCase().includes(needle) ||
-        block.options.some((option) => option.toLowerCase().includes(needle)),
+        block.options.some((option) => option.toLowerCase().includes(needle)) ||
+        (block.optionsEn ?? []).some((option) => option.toLowerCase().includes(needle)),
     )
     .slice(-MAX_HITS)
     .reverse();
@@ -131,7 +132,7 @@ export default async function Page({ params, searchParams }: { params: { lang: s
                 {t.publicAnswer}:{' '}
                 {block.revealedAnswerIndex === null
                   ? t.notRevealed
-                  : truncate(block.revealedAnswerText ?? t.answerUnknown, 80)}
+                  : truncate(revealedTextFor(block, lang) ?? t.answerUnknown, 80)}
               </p>
             </Card>
           ))}

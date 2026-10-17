@@ -92,6 +92,8 @@ export const en = {
   winnerLine: 'Winner this block',
   winnerNote: 'Fastest correct answer takes 40% of the reward left after the Impact Treasury.',
   poolNote: 'The other 60% is shared only by the miners who answered correctly in this block.',
+  poolRecipients: 'Recipients of the 60% pool ({count})',
+  poolRecipientsEmpty: 'No correct answers in this block — nobody received the 60% share.',
   /** Shown instead of a letter whenever an answer's text is unavailable. */
   answerUnknown: 'Answer text unavailable',
   winnerPending: 'The winner appears once the block is sealed.',

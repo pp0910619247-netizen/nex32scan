@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { durationParts, formatCount, formatDuration, formatNex, formatPercent, group, optionText, shortHash, truncate } from './format';
+import { durationParts, formatCount, formatDuration, formatNex, formatPercent, group, optionText, optionsFor, revealedTextFor, shortHash, truncate } from './format';
 
 const NEX = 10n ** 18n;
 
@@ -55,6 +55,23 @@ describe('explorer formatters', () => {
     expect(optionText(['River'], 3)).toBeNull();
     expect(optionText(['   '], 0)).toBeNull();
     expect(optionText([], 0)).toBeNull();
+  });
+
+  it('picks options by language with a Thai fallback (EN is derived display data)', () => {
+    const bilingual = { options: ['ข', 'ค'], optionsEn: ['B', 'C'] };
+    expect(optionsFor(bilingual, 'th')).toEqual(['ข', 'ค']);
+    expect(optionsFor(bilingual, 'en')).toEqual(['B', 'C']);
+    // Legacy snapshot without EN → Thai stays the honest fallback.
+    expect(optionsFor({ options: ['ข', 'ค'] }, 'en')).toEqual(['ข', 'ค']);
+    expect(optionsFor({ options: ['ข'], optionsEn: [] }, 'en')).toEqual(['ข']);
+    expect(optionsFor({ options: ['ข'], optionsEn: null }, 'en')).toEqual(['ข']);
+  });
+
+  it('picks the revealed answer text by language with a Thai fallback', () => {
+    expect(revealedTextFor({ revealedAnswerText: 'ค', revealedAnswerTextEn: 'C' }, 'en')).toBe('C');
+    expect(revealedTextFor({ revealedAnswerText: 'ค', revealedAnswerTextEn: 'C' }, 'th')).toBe('ค');
+    expect(revealedTextFor({ revealedAnswerText: 'ค' }, 'en')).toBe('ค');
+    expect(revealedTextFor({ revealedAnswerText: null, revealedAnswerTextEn: null }, 'en')).toBeNull();
   });
 
   it('flattens and cuts long question text', () => {

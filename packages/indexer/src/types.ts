@@ -45,9 +45,16 @@ export interface QuizExplorerBlock {
   readonly promptTh: string;
   readonly promptEn: string;
   readonly options: readonly string[];
+  /**
+   * English option texts, index-aligned with `options` (display-only, derived
+   * from the public bank). `null`/absent for legacy snapshots — show Thai.
+   */
+  readonly optionsEn?: readonly string[] | null;
   readonly contentHash: HexHash;
   readonly revealedAnswerIndex: number | null;
   readonly revealedAnswerText: string | null;
+  /** English text of the revealed option; `null` when unavailable (legacy). */
+  readonly revealedAnswerTextEn?: string | null;
   readonly answerCommitment: HexHash | null;
   readonly totalAnswers: number;
   readonly correctAnswers: number;

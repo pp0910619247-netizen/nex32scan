@@ -31,7 +31,7 @@ pnpm --filter @nexus/nex32scan test    # vitest
 
 | Endpoint | Result |
 | --- | --- |
-| `GET /api/explorer` | Full indexer snapshot (`stats`, `quizBlocks`, `problems`, `proposals`). In live mode the node's block list carries counts only, so the per-block `answers` from the feed are merged back in — the payload has the same shape in live and snapshot mode |
+| `GET /api/explorer` | Full indexer snapshot (`stats`, `quizBlocks`, `problems`, `proposals`) plus the quiz-chain `status` aggregates and the newest `recentAnswers` feed. In live mode the node's block list carries counts only, so the per-block `answers` from the feed are merged back in — the payload has the same shape in live and snapshot mode. Note: `stats` counts legacy Polygon events and stays zero until the token contracts are indexed — read `status` + `quizBlocks` for quiz-chain data |
 | `GET /api/status` | Chain aggregates (`503` when no data source is readable) |
 | `GET /api/answers?limit=20` | Newest answers, newest first (`limit` capped at 200) |
 | `GET /api/search?q=` | `200` → `{kind:"block",height}` / `{kind:"address"}` / `{kind:"transaction",hash}` · `404` `{kind:"notFound"}` · `400` `{kind:"invalid"}` |

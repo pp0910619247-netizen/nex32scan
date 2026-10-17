@@ -9,7 +9,7 @@ import { chainStatus, recentAnswers } from '@/lib/chain-data';
 import { disciplineGraph } from '@/lib/discipline-graph';
 import { indexer } from '@/lib/explorer';
 import { labFlags } from '@/lib/lab';
-import { formatCount, formatNex, optionText, truncate } from '@/lib/format';
+import { formatCount, formatNex, optionText, optionsFor, revealedTextFor, truncate } from '@/lib/format';
 import { GENESIS_FACTS, scheduledBlockReward } from '@/lib/reward';
 import { pageAlternates } from '@/lib/seo';
 
@@ -43,8 +43,9 @@ export default async function Page({ params }: { params: { lang: string } }) {
   const blocks = (snapshot.quizBlocks ?? []).slice(-LATEST).reverse();
   const questions = blocks.slice(0, LATEST_QUESTIONS);
   const knowledgeMap = labFlags().disciplineGraph ? disciplineGraph(snapshot.quizBlocks ?? []) : null;
-  // Option lists per height, so the answer feed can name the picked option.
-  const optionsByHeight = new Map((snapshot.quizBlocks ?? []).map((block) => [block.height, block.options]));
+  // Option lists per height (in the page language), so the answer feed can
+  // name the picked option; EN is derived display data with a Thai fallback.
+  const optionsByHeight = new Map((snapshot.quizBlocks ?? []).map((block) => [block.height, optionsFor(block, lang)]));
   void status;
 
   return (
@@ -179,7 +180,7 @@ export default async function Page({ params }: { params: { lang: string } }) {
                   </span>
                 ) : (
                   <Badge key="result" tone="solid">
-                    {t.publicAnswer}: {truncate(block.revealedAnswerText ?? t.answerUnknown, 60)}
+                    {t.publicAnswer}: {truncate(revealedTextFor(block, lang) ?? t.answerUnknown, 60)}
                   </Badge>
                 ),
               ])}

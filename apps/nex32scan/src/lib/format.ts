@@ -2,6 +2,7 @@
  * Display formatting for the explorer. All NEX math stays in `bigint` wei so a
  * 21,000,000-supply figure never loses precision to a float.
  */
+import type { QuizExplorerBlock } from '@nexus/indexer';
 import { NEX_DECIMALS } from '@nexus/shared';
 
 const WEI_PER_NEX = 10n ** BigInt(NEX_DECIMALS);
@@ -42,6 +43,33 @@ export function formatNex(wei: bigint, maxFractionDigits = 9): string {
 export function optionText(options: readonly string[], index: number): string | null {
   const text = options[index];
   return typeof text === 'string' && text.trim().length > 0 ? text : null;
+}
+
+/**
+ * The block's options in the page language. English is display-only data that
+ * the node derives from the public bank; on legacy snapshots it is absent, so
+ * the Thai text stays the honest fallback instead of showing an empty list.
+ *
+ * @param block - Quiz-chain block (Thai `options` always present).
+ * @param lang - Active page language.
+ */
+export function optionsFor(
+  block: Pick<QuizExplorerBlock, 'options' | 'optionsEn'>,
+  lang: 'th' | 'en',
+): readonly string[] {
+  return lang === 'en' && block.optionsEn && block.optionsEn.length > 0 ? block.optionsEn : block.options;
+}
+
+/**
+ * The revealed answer text in the page language (Thai fallback for snapshots
+ * that predate the display-only EN derivation).
+ */
+export function revealedTextFor(
+  block: Pick<QuizExplorerBlock, 'revealedAnswerText' | 'revealedAnswerTextEn'>,
+  lang: 'th' | 'en',
+): string | null {
+  if (lang === 'en' && block.revealedAnswerTextEn) return block.revealedAnswerTextEn;
+  return block.revealedAnswerText;
 }
 
 /** Flattens whitespace and cuts to `max` characters with an ellipsis. */

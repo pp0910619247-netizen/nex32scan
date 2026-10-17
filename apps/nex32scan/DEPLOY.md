@@ -84,7 +84,7 @@ npx vercel deploy --prod --yes
 
 | Endpoint | ผลลัพธ์ |
 |---|---|
-| `GET /api/explorer` | snapshot ทั้งหมด (`stats`, `quizBlocks`, `problems`, `proposals`) |
+| `GET /api/explorer` | snapshot ทั้งหมด (`stats`, `quizBlocks`, `problems`, `proposals`) + `status` (สถิติเชนควิซ) + `recentAnswers` (ฟีดคำตอบล่าสุด) |
 | `GET /api/status` | สถิติทั้งเชน (height, blocks, attempts, answers, correct, block time, difficulty, milestone) — `503` เมื่ออ่านแหล่งข้อมูลไม่ได้ |
 | `GET /api/answers?limit=20` | คำตอบล่าสุด เรียงใหม่→เก่า (`limit` สูงสุด 200) |
 | `GET /api/search?q=` | `200` → `{kind:"block",height}` / `{kind:"address"}` / `{kind:"transaction",hash}` · `404` → `{kind:"notFound"}` · `400` → `{kind:"invalid"}` |

@@ -5,7 +5,7 @@ import { AddressCell, Badge, Card, Shell, langFrom } from '@/components/shell';
 import { HashChip } from '@/components/hash-chip';
 import { dictionary } from '@/i18n';
 import { indexer } from '@/lib/explorer';
-import { formatCount, formatPercent } from '@/lib/format';
+import { formatCount, formatPercent, optionsFor, revealedTextFor } from '@/lib/format';
 import { pageAlternates } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
@@ -34,6 +34,8 @@ export default async function Page({ params }: { params: { lang: string; height:
   if (!quizBlock && !problem) notFound();
 
   const revealed = quizBlock?.revealedAnswerIndex ?? null;
+  const revealedText = quizBlock ? revealedTextFor(quizBlock, lang) : null;
+  const quizOptions = quizBlock ? optionsFor(quizBlock, lang) : [];
   const solveRate =
     quizBlock && quizBlock.totalAnswers > 0
       ? formatPercent(quizBlock.correctAnswers, quizBlock.totalAnswers)
@@ -68,7 +70,7 @@ export default async function Page({ params }: { params: { lang: string; height:
             </p>
             {quizBlock ? (
               <ol className="grid gap-1.5">
-                {quizBlock.options.map((option, index) => (
+                {quizOptions.map((option, index) => (
                   <li
                     key={index}
                     className={
@@ -90,7 +92,7 @@ export default async function Page({ params }: { params: { lang: string; height:
               <p className="text-sm text-stone-600">{t.notRevealed}</p>
             ) : (
               <p className="text-sm text-stone-900">
-                {quizBlock.revealedAnswerText ?? `#${revealed + 1}`}
+                {revealedText ?? `#${revealed + 1}`}
               </p>
             )}
             {quizBlock?.answerCommitment ? (

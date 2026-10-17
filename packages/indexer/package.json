@@ -23,6 +23,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json",
-    "test": "vitest run"
-  }
+  "test": "vitest run",
+  "test:coverage": "vitest run --coverage"
+}
 }

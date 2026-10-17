@@ -79,6 +79,7 @@ function toQuizExplorerAnswers(raw: unknown): QuizExplorerAnswer[] | undefined {
 function toQuizExplorerBlock(raw: Record<string, unknown>): QuizExplorerBlock {
   const question = (raw.question ?? {}) as Record<string, unknown>;
   const options = Array.isArray(question.options) ? question.options.map(String) : [];
+  const optionsEn = Array.isArray(question.optionsEn) ? question.optionsEn.map(String) : null;
   const revealed =
     raw.revealedAnswerIndex === null || raw.revealedAnswerIndex === undefined
       ? null
@@ -100,9 +101,11 @@ function toQuizExplorerBlock(raw: Record<string, unknown>): QuizExplorerBlock {
     promptTh: String(question.promptTh ?? ''),
     promptEn: String(question.promptEn ?? ''),
     options,
+    optionsEn,
     contentHash: String(question.contentHash ?? '') as HexHash,
     revealedAnswerIndex: revealed,
     revealedAnswerText: revealed === null ? null : (options[revealed] ?? null),
+    revealedAnswerTextEn: revealed === null || optionsEn === null ? null : (optionsEn[revealed] ?? null),
     answerCommitment: raw.answerCommitment == null ? null : (String(raw.answerCommitment) as HexHash),
     totalAnswers: Number(raw.answerCount ?? Number(Array.isArray(raw.answers) ? raw.answers.length : 0)),
     correctAnswers: Number(raw.correctCount ?? 0),

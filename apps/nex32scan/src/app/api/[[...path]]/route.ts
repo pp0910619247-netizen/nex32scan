@@ -5,6 +5,9 @@ import { indexer } from '@/lib/explorer';
 
 export const dynamic = 'force-dynamic';
 
+/** Answers included in /api/explorer (same window the baked snapshot uses). */
+const SNAPSHOT_ANSWER_LIMIT = 50;
+
 /** JSON.stringify that survives bigint fields (impactTreasuryWei, weights…). */
 function toJsonSafe(value: unknown): string {
   return JSON.stringify(value, (_key, item) => (typeof item === 'bigint' ? item.toString() : item));
@@ -15,7 +18,7 @@ function toJsonSafe(value: unknown): string {
  * Splitting it into /api/explorer + /api/search cost two extra serverless
  * functions, which the free Hobby plan does not have (12 max — see DEPLOY.md).
  *
- *   GET /api/explorer      → full indexer snapshot (baked or live chain)
+ *   GET /api/explorer      → full indexer snapshot + quiz-chain status + answer feed
  *   GET /api/status        → chain-wide aggregates for the stat bar
  *   GET /api/answers?limit → newest answers (the explorer's tx feed)
  *   GET /api/search?q=…    → block height / address / tx-hash resolution
@@ -43,9 +46,17 @@ export async function GET(request: NextRequest, { params }: { params: { path?: s
         }));
       return rows.length === 0 ? block : { ...block, answers: rows };
     });
-    return new NextResponse(toJsonSafe({ ...snapshot, quizBlocks }), {
-      headers: { 'content-type': 'application/json' },
-    });
+    // Additive enrichment: `stats` counts legacy Polygon events, which stay
+    // zero until the token contracts are indexed — read alone it looks like
+    // "no data". Attach the quiz-chain aggregates and the answer feed the site
+    // itself renders, so the payload is self-describing in every mode.
+    const status = await chainStatus();
+    return new NextResponse(
+      toJsonSafe({ ...snapshot, quizBlocks, status, recentAnswers: feed.slice(0, SNAPSHOT_ANSWER_LIMIT) }),
+      {
+        headers: { 'content-type': 'application/json' },
+      },
+    );
   }
 
   if (endpoint === 'status') {

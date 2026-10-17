@@ -6,7 +6,7 @@ import { RelativeTime } from '@/components/live';
 import { dictionary, timeWords } from '@/i18n';
 import { recentAnswers } from '@/lib/chain-data';
 import { indexer } from '@/lib/explorer';
-import { formatCount, optionText, truncate } from '@/lib/format';
+import { formatCount, optionText, optionsFor, truncate } from '@/lib/format';
 import { pageAlternates } from '@/lib/seo';
 
 /** Reads the address from the path, so it stays a single serverless function. */
@@ -27,9 +27,10 @@ export default async function Page({ params }: { params: { lang: string; addr: s
     explorer.snapshot(),
   ]);
   const answers = feed.filter((row) => row.miner.toLowerCase() === address);
-  // Option texts per height: the explorer names the picked option in words,
-  // never as "A"/"ก" (a letter would let anyone copy an answer).
-  const optionsByHeight = new Map((snapshot.quizBlocks ?? []).map((block) => [block.height, block.options]));
+  // Option texts per height (in the page language): the explorer names the
+  // picked option in words, never as "A"/"ก" (a letter would let anyone copy
+  // an answer). EN is display-only with a Thai fallback.
+  const optionsByHeight = new Map((snapshot.quizBlocks ?? []).map((block) => [block.height, optionsFor(block, lang)]));
 
   return (
     <Shell lang={lang}>
